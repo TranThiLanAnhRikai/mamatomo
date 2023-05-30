@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "592395231921",
+    "firebase_url": "https://mamatomo-f7f94-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "mamatomo-f7f94",
+    "storage_bucket": "mamatomo-f7f94.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:592395231921:android:066dcf568ca55fd353b890",
+        "android_client_info": {
+          "package_name": "com.example.mamatomo"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBk4IQ-55fTlU3nOiCT5jRiAlUzmZS3-s4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

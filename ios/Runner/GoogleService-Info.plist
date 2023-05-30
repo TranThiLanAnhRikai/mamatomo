@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>AIzaSyBSmD2N7Dy5XAWfQSDX6wh5-y7FXWNR1S4</string>
+	<key>GCM_SENDER_ID</key>
+	<string>592395231921</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.mamatomo</string>
+	<key>PROJECT_ID</key>
+	<string>mamatomo-f7f94</string>
+	<key>STORAGE_BUCKET</key>
+	<string>mamatomo-f7f94.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:592395231921:ios:1e6e4688f9977e0453b890</string>
+	<key>DATABASE_URL</key>
+	<string>https://mamatomo-f7f94-default-rtdb.asia-southeast1.firebasedatabase.app</string>
+</dict>
+</plist>
