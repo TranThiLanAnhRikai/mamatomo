@@ -47,5 +47,13 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>NSPhotoLibraryUsageDescription</key>
+    <string>For user to choose a photo to set as their avatar in the app.</string>
+
+    <key>NSCameraUsageDescription</key>
+    <string>For user to take a photo to set as their avatar in the app.</string>
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Your location is required to provide relevant information based on your current location.</string>
+
 </dict>
 </plist>

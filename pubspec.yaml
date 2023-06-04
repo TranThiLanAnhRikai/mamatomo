@@ -35,6 +35,10 @@ dependencies:
   font_awesome_flutter: ^10.4.0
   simple_animations: ^5.0.0+3
   http: ^0.13.4
+  numberpicker: ^2.1.2
+  image_picker: ^0.8.4+2
+  geolocator: ^7.6.2
+  geocoding: ^2.1.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
