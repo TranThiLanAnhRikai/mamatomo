@@ -12,6 +12,7 @@ import 'dart:convert';
 import 'package:mamatomo/hobby.dart';
 import 'dart:typed_data';
 import 'package:mamatomo/constants/color.dart';
+import 'package:mamatomo/constants/color.dart';
 
 
 
@@ -175,7 +176,7 @@ class _MomProfilePageState extends State<MomProfilePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: AppColors.appBarColor,
-        title: Text("Mom's Profile", style: TextStyle(color: Colors.black),),
+        title: Text("Mom Profile", style: TextStyle(color: Colors.black),),
       ),
       body: SingleChildScrollView(
         child: Padding(

@@ -10,6 +10,7 @@ import 'dart:developer';
 import 'dart:async';
 import 'dart:io';
 import 'package:http_parser/http_parser.dart';
+import 'package:mamatomo/constants/color.dart';
 
 class ChildProfile extends StatefulWidget {
   final UserModel new_user;
@@ -131,8 +132,10 @@ class _ChildProfileState extends State<ChildProfile> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       appBar: AppBar(
-        title: Text('Child Profile'),
+        backgroundColor: AppColors.appBarColor,
+        title: Text("Child Profile", style: TextStyle(color: Colors.black),),
       ),
       body: ListView(
         padding: EdgeInsets.all(16.0),
@@ -208,8 +211,26 @@ class _ChildProfileState extends State<ChildProfile> {
           ElevatedButton(
             child: Text('Add'),
             onPressed: () {
-              if (_nameController.text.isNotEmpty && _selectedDate != null && ((isBoySelected == true && isGirlSelected != true && isExpectingSelected != true) ||
-                  (isBoySelected != true && isGirlSelected == true && isExpectingSelected != true) || (isBoySelected != true && isGirlSelected != true && isExpectingSelected == true))) {
+              if (_nameController.text.isEmpty || _selectedDate == null || (!isBoySelected && !isGirlSelected && !isExpectingSelected))
+              {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text("Missing Fields"),
+                      content: Text("Please fill in all the fields."),
+                      actions: [
+                        TextButton(
+                          child: Text("OK"),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        ),
+                      ],
+                    );
+                  },
+                );
+              } else {
                 setState(() {
                   final gender = isBoySelected
                       ? Gender.Boy.index
@@ -232,6 +253,8 @@ class _ChildProfileState extends State<ChildProfile> {
               }
             },
           ),
+
+
           SizedBox(height: 16.0),
 
           for (var child in children)
