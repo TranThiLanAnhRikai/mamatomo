@@ -11,6 +11,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:mamatomo/hobby.dart';
 import 'dart:typed_data';
+import 'package:mamatomo/constants/color.dart';
 
 
 
@@ -36,11 +37,12 @@ class _MomProfilePageState extends State<MomProfilePage> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   TextEditingController _introController = TextEditingController();
+  TextEditingController _confirmPasswordController = TextEditingController();
+
   File? uploadedImage;
   List<int> hobbies = [];
   int _currentAge = 25;
   String? _address = "";
-
   bool locationEnabled = false;
 
   Future<http.Response> createUser(UserModel user, List<int> hobbies) async {
@@ -71,31 +73,15 @@ class _MomProfilePageState extends State<MomProfilePage> {
       address: _address,
       imageBytes: uploadedImage != null ? uploadedImage!.readAsBytesSync() : Uint8List(0),
     );
-    debugPrint(uploadedImage!.path);
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => ChildProfile(new_user: new_user, hobbies: hobbies, uploadedImage: uploadedImage!)),
     );
   }
-  // Future<void> _showDatePicker(BuildContext context) async {
-  //   final currentDate = DateTime.now();
-  //   final initialDate = selectedDate ?? currentDate.subtract(Duration(days: 365 * 25));
-  //   final pickedDate = await showDatePicker(
-  //     context: context,
-  //     initialDate: initialDate,
-  //     firstDate: DateTime(currentDate.year - 100),
-  //     lastDate: currentDate,
-  //   );
-  //
-  //   if (pickedDate != null) {
-  //     setState(() {
-  //       selectedDate = pickedDate;
-  //     });
-  //   }
-  // }
+
 
   Future<String?> getAddress(double latitude, double longitude) async {
-    final apiKey = 'YAIzaSyBQk6u-RmuHWR2A6HDytDi1WXl4vtwDIxs'; // Replace with your Google Maps API key
+    final apiKey = 'AIzaSyBQk6u-RmuHWR2A6HDytDi1WXl4vtwDIxs';
     final url =
         'https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=$apiKey';
 
@@ -104,42 +90,21 @@ class _MomProfilePageState extends State<MomProfilePage> {
     if (response.statusCode == 200) {
       final data = json.decode(response.body);
       final results = data['results'];
+      debugPrint("results");
+      debugPrint(results.toString());
       if (results.length > 0) {
         final formattedAddress = results[0]['formatted_address'];
         return formattedAddress;
+        debugPrint("data");
+        debugPrint(formattedAddress);
       }
+
     }
 
     //return null;
   }
 
-  // void _handleImageUpload() async {
-  //   final picker = ImagePicker();
-  //   final pickedImage = await picker.getImage(source: ImageSource.gallery);
-  //
-  //   if (pickedImage != null) {
-  //     File imageFile = File(pickedImage.path);
-  //     Uint8List? bytes = imageFile.readAsBytesSync();
-  //
-  //     setState(() {
-  //       uploadedImage = imageFile;
-  //       userModel.imageBytes = bytes;
-  //     });
-  //   }
-  // }
-  // void _handleImageUpload() async {
-  //   final picker = ImagePicker();
-  //   final pickedImage = await picker.getImage(source: ImageSource.gallery);
-  //
-  //   if (pickedImage != null) {
-  //     File imageFile = File(pickedImage.path);
-  //     Uint8List bytes = await imageFile.readAsBytes();
-  //
-  //     setState(() {
-  //       uploadedImage = bytes;
-  //     });
-  //   }
-  // }
+
 
   void _handleImageUpload() async {
     final picker = ImagePicker();
@@ -153,9 +118,6 @@ class _MomProfilePageState extends State<MomProfilePage> {
       });
     }
   }
-
-
-
 
 
 
@@ -212,7 +174,8 @@ class _MomProfilePageState extends State<MomProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Mom's Profile"),
+        backgroundColor: AppColors.appBarColor,
+        title: Text("Mom's Profile", style: TextStyle(color: Colors.black),),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -240,7 +203,15 @@ class _MomProfilePageState extends State<MomProfilePage> {
                     ),
                 ],
               ),
-
+              // if (uploadedImage == null && uploadImageFlag == true)
+              //   Container(
+              //     child: Text(
+              //       "Add an image for your profile avatar",
+              //       style: TextStyle(
+              //         color: Colors.red,
+              //       ),
+              //     ),
+              //   ),
               SizedBox(height: 16),
               Text("Username"),
               TextFormField(
@@ -252,12 +223,33 @@ class _MomProfilePageState extends State<MomProfilePage> {
               SizedBox(height: 16),
               Text("Password"),
               TextFormField(
+                obscureText: true,
                 controller: _passwordController,
                 decoration: InputDecoration(
                   hintText: "Password",
                 ),
               ),
               SizedBox(height: 16),
+              Text("Confirm Password"),
+              TextFormField(
+                obscureText: true,
+                controller: _confirmPasswordController,
+                decoration: InputDecoration(
+                  hintText: "Confirm Password",
+                ),
+              ),
+              SizedBox(height: 16),
+              if (_passwordController.text.isNotEmpty &&
+                  _confirmPasswordController.text.isNotEmpty &&
+                  _passwordController.text != _confirmPasswordController.text)
+                Container(
+                  child: Text(
+                    "Password doesn't match",
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
               Column(
                 children: <Widget>[
                   Align(
@@ -286,6 +278,15 @@ class _MomProfilePageState extends State<MomProfilePage> {
                   hintText: "Let us know about you",
                 ),
               ),
+              if (_introController == null)
+                Container(
+                  child: Text(
+                    "Let us know about you",
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                ),
               SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -304,6 +305,15 @@ class _MomProfilePageState extends State<MomProfilePage> {
                   ),
                 ],
               ),
+              // if (locationEnabled == false && locationEnabledFlag == true)
+              //   Container(
+              //     child: Text(
+              //       "Allow location to find friends near you",
+              //       style: TextStyle(
+              //         color: Colors.red,
+              //       ),
+              //     ),
+              //   ),
               Text("Hobbies"),
               SizedBox(height: 16),
               GridView.count(
@@ -314,73 +324,73 @@ class _MomProfilePageState extends State<MomProfilePage> {
                   InterestTile(
                     icon: Icons.book,
                     text: "Reading",
-                    isSelected: hobbies.contains("Reading"),
+                    isSelected: hobbies.contains(Hobby.Reading.index),
                     onTap: () => _toggleInterest(Hobby.Reading.index),
                   ),
                   InterestTile(
                     icon: Icons.restaurant,
                     text: "Cooking",
-                    isSelected: hobbies.contains("Cooking"),
+                    isSelected: hobbies.contains(Hobby.Cooking.index),
                     onTap: () => _toggleInterest(Hobby.Cooking.index),
                   ),
                   InterestTile(
                     icon: Icons.create,
                     text: "Knitting",
-                    isSelected: hobbies.contains("Knitting"),
+                    isSelected: hobbies.contains(Hobby.Knitting.index),
                     onTap: () => _toggleInterest(Hobby.Knitting.index),
                   ),
                   InterestTile(
                     icon: Icons.music_note,
                     text: "Dancing",
-                    isSelected: hobbies.contains("Dancing"),
+                    isSelected: hobbies.contains(Hobby.Dancing.index),
                     onTap: () => _toggleInterest(Hobby.Dancing.index),
                   ),
                   InterestTile(
                     icon: Icons.flight,
                     text: "Traveling",
-                    isSelected: hobbies.contains("Traveling"),
+                    isSelected: hobbies.contains(Hobby.Traveling.index),
                     onTap: () => _toggleInterest(Hobby.Traveling.index),
                   ),
                   InterestTile(
                     icon: Icons.directions_walk,
                     text: "Walking",
-                    isSelected: hobbies.contains("Walking"),
+                    isSelected: hobbies.contains(Hobby.Walking.index),
                     onTap: () => _toggleInterest(Hobby.Walking.index),
                   ),
                   InterestTile(
                     icon: Icons.directions_run,
                     text: "Running",
-                    isSelected: hobbies.contains("Running"),
+                    isSelected: hobbies.contains(Hobby.Running.index),
                     onTap: () => _toggleInterest(Hobby.Running.index),
                   ),
                   InterestTile(
                     icon: Icons.spa,
                     text: "Doing Yoga",
-                    isSelected: hobbies.contains("Doing Yoga"),
+                    isSelected: hobbies.contains(Hobby.DoingYoga.index),
                     onTap: () => _toggleInterest(Hobby.DoingYoga.index),
                   ),
                   InterestTile(
                     icon: Icons.book,
                     text: "Manga",
-                    isSelected: hobbies.contains("Manga"),
+                    isSelected: hobbies.contains(Hobby.Manga.index),
                     onTap: () => _toggleInterest(Hobby.Manga.index),
                   ),
                   InterestTile(
                     icon: Icons.tv,
                     text: "Watch TV",
-                    isSelected: hobbies.contains("Watch TV"),
+                    isSelected: hobbies.contains(Hobby.WatchTV.index),
                     onTap: () => _toggleInterest(Hobby.WatchTV.index),
                   ),
                   InterestTile(
                     icon: Icons.movie,
                     text: "Netflix",
-                    isSelected: hobbies.contains("Netflix"),
+                    isSelected: hobbies.contains(Hobby.Netflix.index),
                     onTap: () => _toggleInterest(Hobby.Netflix.index),
                   ),
                   InterestTile(
                     icon: Icons.sports,
                     text: "Sports",
-                    isSelected: hobbies.contains("Sports"),
+                    isSelected: hobbies.contains(Hobby.Sports.index),
                     onTap: () => _toggleInterest(Hobby.Sports.index),
                   ),
                 ],
@@ -391,7 +401,69 @@ class _MomProfilePageState extends State<MomProfilePage> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    _navigateToChildProfile();
+                    if (_nameController.text.isEmpty ||
+                        _passwordController.text.isEmpty ||
+                        _introController.text.isEmpty ||
+                        _confirmPasswordController.text.isEmpty ||
+                        uploadedImage == null
+                        ) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("Missing Fields"),
+                            content: Text("Please fill in all the fields."),
+                            actions: [
+                              TextButton(
+                                child: Text("OK"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } else if (!locationEnabled) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("Location Not Enabled"),
+                            content: Text("Please allow location to find friends near you."),
+                            actions: [
+                              TextButton(
+                                child: Text("OK"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    } else if (hobbies.isEmpty) {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: Text("No hobbies chosen"),
+                            content: Text("Please choose at least one hobby"),
+                            actions: [
+                              TextButton(
+                                child: Text("OK"),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                    else {
+                      _navigateToChildProfile();
+                    }
                   },
                   child: Text("Next"),
                 ),

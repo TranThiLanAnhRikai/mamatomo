@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'dart:developer';
 import 'dart:async';
 import 'dart:io';
+import 'package:http_parser/http_parser.dart';
 
 class ChildProfile extends StatefulWidget {
   final UserModel new_user;
@@ -85,24 +86,23 @@ class _ChildProfileState extends State<ChildProfile> {
   }
 
 
-
-
-
-
   Future<void> _createUser(UserModel user, List<ChildModel> children, List<int> hobbies, File uploadedImage) async {
     try {
-      // Create the user data payload
+      final imageBytes = await uploadedImage.readAsBytes();
+      final String base64Image = base64Encode(imageBytes);
 
-      Map<String, dynamic> userData = {
+      final Map<String, dynamic> userData = {
         'name': user.name,
         'password': user.password,
         'age': user.age,
         'intro': user.intro,
         'address': user.address,
-        'image': uploadedImage.path,
+        'image': base64Image,
         'children': children.map((child) => child.toJson()).toList(),
         'hobbies': hobbies,
       };
+
+
       final jsonData = jsonEncode(userData);
 
       //Make a POST request to the create_user API endpoint
@@ -112,9 +112,10 @@ class _ChildProfileState extends State<ChildProfile> {
         body: jsonData,
       );
 
+      // final response = await request.send();
+
       if (response.statusCode == 200) {
         // User creation successful
-        debugPrint('Img: ${user.imageBytes.toString()}');
         print('User created successfully');
       } else {
         // User creation failed
@@ -125,6 +126,7 @@ class _ChildProfileState extends State<ChildProfile> {
       print('Exception occurred while creating user: $e');
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -206,7 +208,8 @@ class _ChildProfileState extends State<ChildProfile> {
           ElevatedButton(
             child: Text('Add'),
             onPressed: () {
-              if (_nameController.text.isNotEmpty && _selectedDate != null) {
+              if (_nameController.text.isNotEmpty && _selectedDate != null && ((isBoySelected == true && isGirlSelected != true && isExpectingSelected != true) ||
+                  (isBoySelected != true && isGirlSelected == true && isExpectingSelected != true) || (isBoySelected != true && isGirlSelected != true && isExpectingSelected == true))) {
                 setState(() {
                   final gender = isBoySelected
                       ? Gender.Boy.index
@@ -262,6 +265,24 @@ class _ChildProfileState extends State<ChildProfile> {
                 child: Text('Register'),
 
                 onPressed: () {
+                  if (children.isEmpty) {
+                    showDialog(context: context,
+                        builder: (BuildContext context)  {
+                      return AlertDialog(
+                        title: Text("Missing fields"),
+                        content: Text("Please add information about your child"),
+                        actions: [
+                          TextButton(
+                            child: Text("OK"),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                    );
+                  };
                   _createUser(new_user, children, hobbies, uploadedImage);
                 },
               ),
