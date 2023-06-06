@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mamatomo/screens/splash.dart';
+import 'package:mamatomo/screens/momprofile.dart';
+import 'package:mamatomo/screens/signin.dart';
 
 void main() {
   runApp(MyApp());
@@ -15,7 +17,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.red,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: Splash(),
+      home: Signin(),
     );
   }
 }
