@@ -11,6 +11,8 @@ import 'dart:async';
 import 'dart:io';
 import 'package:http_parser/http_parser.dart';
 import 'package:mamatomo/constants/color.dart';
+import 'package:intl/intl.dart';
+
 
 class ChildProfile extends StatefulWidget {
   final UserModel new_user;
@@ -81,10 +83,10 @@ class _ChildProfileState extends State<ChildProfile> {
     }
   }
 
-  int _calculateDays(DateTime birthday) {
-    final now = DateTime.now();
-    return birthday.difference(now).inDays.abs();
-  }
+  // int _calculateDays(DateTime birthday) {
+  //   final now = DateTime.now();
+  //   return birthday.difference(now).inDays.abs();
+  // }
 
 
   Future<void> _createUser(UserModel user, List<ChildModel> children, List<int> hobbies, File uploadedImage) async {
@@ -237,11 +239,13 @@ class _ChildProfileState extends State<ChildProfile> {
                       : isGirlSelected
                       ? Gender.Girl.index
                       : Gender.Expecting.index;
+                  DateTime dateOnly = DateTime(_selectedDate!.year, _selectedDate!.month, _selectedDate!.day);
                   final newChild = ChildModel(
                     name: _nameController.text,
                     genderId: gender,
-                    days: _calculateDays(_selectedDate!),
+                    birthday: DateFormat('yyyyMMdd').format(dateOnly),
                   );
+
                   sub_text = _calculateAge(_selectedDate!);
                   children.add(newChild);
                   _nameController.clear();

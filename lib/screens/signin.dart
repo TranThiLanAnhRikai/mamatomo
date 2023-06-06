@@ -8,6 +8,7 @@ import 'package:flutter/src/widgets/basic.dart';
 import 'package:mamatomo/constants/color.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:mamatomo/screens/home.dart';
 
 
 class Signin extends StatefulWidget {
@@ -23,6 +24,7 @@ class _SigninState extends State<Signin> {
   bool _isLoading = false;
   String? _errorMessage;
   bool _obscurePassword = true;
+
   @override
   void dispose() {
     _usernameController.dispose();
@@ -44,33 +46,60 @@ class _SigninState extends State<Signin> {
   }
 
   Future<void> _login(String username) async {
-
     if (_usernameController.text.isEmpty || _passwordController.text.isEmpty) {
       _clearErrorMessage();
       return;
     }
-    final response = await http.get(Uri.parse('http://localhost:8000/get_user?username=$username'));
+    final url = Uri.parse('http://localhost:8000/get_user');
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'username': username}),
+    );
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseBody = jsonDecode(response.body);
-      final String storedPassword = responseBody['pw'] as String;
-      // Compare the password
+      final String? storedPassword = responseBody['pw'] as String?;
+      debugPrint(responseBody.keys.toString());
+      debugPrint(responseBody.values.toString());
+      // Handle the user data
       if (_passwordController.text == storedPassword) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => MomProfilePage()),
+          MaterialPageRoute(builder: (context) => Home(user: responseBody)),
         );
       } else {
         _errorMessage = "Wrong password";
         debugPrint(_errorMessage);
       }
-      // Proceed with the remaining logic (e.g., navigation)
     } else {
-      _errorMessage = "No user found";
+      final error = jsonDecode(response.body);
+      // Handle the error
     }
     setState(() {});
   }
 
+  // Pass username in URL, response is pw
+  // final response = await http.get(Uri.parse('http://localhost:8000/get_user?username=$username'));
+  //
+  // if (response.statusCode == 200) {
+  //   final Map<String, dynamic> responseBody = jsonDecode(response.body);
+  //   final String storedPassword = responseBody['pw'] as String;
+  //   // Compare the password
+  //   if (_passwordController.text == storedPassword) {
+  //     Navigator.push(
+  //       context,
+  //       MaterialPageRoute(builder: (context) => MomProfilePage()),
+  //     );
+  //   } else {
+  //     _errorMessage = "Wrong password";
+  //     debugPrint(_errorMessage);
+  //   }
+  //   // Proceed with the remaining logic (e.g., navigation)
+  // } else {
+  //   _errorMessage = "No user found";
+  // }
+  // setState(() {});
 
 
   @override
@@ -205,6 +234,10 @@ class _SigninState extends State<Signin> {
                   InkWell(
                     onTap: () {
                       // Navigate to Sign Up screen
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MomProfilePage()),
+                      );
                     },
                     child: Text(
                       'Sign Up Here',

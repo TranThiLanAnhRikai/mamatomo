@@ -3,19 +3,19 @@ import 'dart:typed_data';
 class ChildModel {
   String name;
   int genderId;
-  int days;
+  String birthday;
 
   ChildModel({
     required this.name,
     required this.genderId,
-    required this.days,
+    required this.birthday,
   });
 
   factory ChildModel.fromJson(Map<String, dynamic> json) {
     return ChildModel(
       name: json['name'],
       genderId: json['gender_id'],
-      days: json['days'],
+      birthday: json['birthday'],
     );
   }
 
@@ -23,7 +23,7 @@ class ChildModel {
     return {
       'name': name,
       'gender_id': genderId,
-      'days': days,
+      'birthday': birthday,
     };
   }
 }
