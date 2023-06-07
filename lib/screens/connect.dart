@@ -14,12 +14,12 @@ class User {
   });
 }
 
-class UserListPage extends StatefulWidget {
+class Connect extends StatefulWidget {
   @override
-  _UserListPageState createState() => _UserListPageState();
+  _ConnectState createState() => _ConnectState();
 }
 
-class _UserListPageState extends State<UserListPage> {
+class _ConnectState extends State<Connect> {
   late List<User> userList = [];
 
   @override
@@ -85,6 +85,6 @@ class _UserListPageState extends State<UserListPage> {
   }
 }
 
-void main() {
-  runApp(MaterialApp(home: UserListPage()));
-}
+// void main() {
+//   runApp(MaterialApp(home: UserListPage()));
+// }
