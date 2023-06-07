@@ -66,7 +66,7 @@ class _SigninState extends State<Signin> {
       if (_passwordController.text == storedPassword) {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => Home(user: responseBody)),
+          MaterialPageRoute(builder: (context) => Home(responseBody: responseBody)),
         );
       } else {
         _errorMessage = "Wrong password";
@@ -79,42 +79,13 @@ class _SigninState extends State<Signin> {
     setState(() {});
   }
 
-  // Pass username in URL, response is pw
-  // final response = await http.get(Uri.parse('http://localhost:8000/get_user?username=$username'));
-  //
-  // if (response.statusCode == 200) {
-  //   final Map<String, dynamic> responseBody = jsonDecode(response.body);
-  //   final String storedPassword = responseBody['pw'] as String;
-  //   // Compare the password
-  //   if (_passwordController.text == storedPassword) {
-  //     Navigator.push(
-  //       context,
-  //       MaterialPageRoute(builder: (context) => MomProfilePage()),
-  //     );
-  //   } else {
-  //     _errorMessage = "Wrong password";
-  //     debugPrint(_errorMessage);
-  //   }
-  //   // Proceed with the remaining logic (e.g., navigation)
-  // } else {
-  //   _errorMessage = "No user found";
-  // }
-  // setState(() {});
 
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.secondaryColor,
-      appBar: AppBar(
-        toolbarHeight: 40,
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
+
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
